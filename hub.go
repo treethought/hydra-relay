@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
 type Hub struct {
@@ -26,9 +28,12 @@ func newHub() *Hub {
 }
 
 func (h *Hub) run() {
+	fmt.Println("starting relay")
 	for {
 		select {
 		case client := <-h.register:
+			fmt.Println("registered client")
+			fmt.Println(client.conn.LocalAddr())
 			h.clients[client] = true
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
